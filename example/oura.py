@@ -25,7 +25,7 @@ API_BASE_URL = "https://api.ouraring.com/v2"
 # OAuth configuration
 CLIENT_ID = os.getenv("OURA_CLIENT_ID")
 CLIENT_SECRET = os.getenv("OURA_CLIENT_SECRET")
-REDIRECT_URI = "http://example.com/callback"  # You can use any localhost URL
+REDIRECT_URI = "https://example.com/callback"  # You can use any localhost URL
 
 # Function definitions
 def get_authorization_url():
@@ -47,9 +47,9 @@ def exchange_code_for_tokens(authorization_code):
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET
     }
-    
+
     response = requests.post(TOKEN_URL, data=data)
-    
+
     if response.status_code == 200:
         return response.json()
     else:
@@ -60,16 +60,16 @@ def exchange_code_for_tokens(authorization_code):
 def refresh_access_token():
     """Use refresh token to get a new access token"""
     refresh_token = os.getenv("OURA_REFRESH_TOKEN")
-    
+
     data = {
         "grant_type": "refresh_token",
         "refresh_token": refresh_token,
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET
     }
-    
+
     response = requests.post(TOKEN_URL, data=data)
-    
+
     if response.status_code == 200:
         return response.json()
     else:
@@ -86,15 +86,15 @@ def save_tokens_to_env(token_data):
 def make_api_request(endpoint):
     """Make authenticated request to Oura API"""
     access_token = os.getenv("OURA_ACCESS_TOKEN")
-    
+
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json"
     }
-    
+
     url = f"{API_BASE_URL}/{endpoint}"
     response = requests.get(url, headers=headers)
-    
+
     if response.status_code == 200:
         return response.json()
     else:
@@ -115,9 +115,10 @@ def get_sleep_hrv(start_date, end_date):
 # === Interactive OAuth Setup (run these one by one) ===
 
 # Step 1: Get authorization URL
-auth_url = get_authorization_url()
-print("Visit this URL to authorize:")
-print(auth_url)
+# auth_url = get_authorization_url()
+# print("Visit this URL to authorize:")
+# print(auth_url)
+# exit()
 
 #  === DEBUG FOR STEP 1 === #
 # auth_url = get_authorization_url()
@@ -129,16 +130,16 @@ print(auth_url)
 
 # Step 2: After visiting URL and getting redirected, extract the 'code' parameter
 # This authorization code can be found in the URL after authorizing app
-authorization_code = "ES56FAEVS2HHALYJMRCSID3TUZ5OFPOS"
+# authorization_code = "TuRQJMyCq0tWyTYzlu9SNix4aPUIPxei"
 
-# Step 3: Exchange code for tokens
-tokens = exchange_code_for_tokens(authorization_code)
+# # Step 3: Exchange code for tokens
+# tokens = exchange_code_for_tokens(authorization_code)
 
-# === DEBUG FOR STEP 3 === #
+# # === DEBUG FOR STEP 3 === #
 # print(tokens) # debug only
 
-# Step 4: Save tokens to .env file
-save_tokens_to_env(tokens)
+# # Step 4: Save tokens to .env file
+# save_tokens_to_env(tokens)
 
 # === After tokens are saved, test API access === #
 user_info = make_api_request("usercollection/personal_info")
